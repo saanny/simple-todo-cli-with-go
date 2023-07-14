@@ -20,11 +20,19 @@ type Task struct {
 	DueDate  string
 	Category string
 	IsDone   bool
-	UserId   string
+	UserID   string
+}
+type Category struct {
+	ID     string
+	Title  string
+	Color  string
+	UserID string
 }
 
 var userStorage []User
 var taskStorage []Task
+var categoryStorage []Category
+
 var authenticatedUser *User
 
 func main() {
@@ -90,7 +98,7 @@ func createTask() {
 		DueDate:  dueDate,
 		Category: category,
 		IsDone:   false,
-		UserId:   authenticatedUser.ID,
+		UserID:   authenticatedUser.ID,
 	}
 	taskStorage = append(taskStorage, task)
 
@@ -99,17 +107,26 @@ func createTask() {
 
 func createCategory() {
 	scanner := bufio.NewScanner(os.Stdin)
-
-	var name, color string
+	id := uuid.New()
+	var title, color string
 
 	fmt.Println("Please enter the category title")
 	scanner.Scan()
-	name = scanner.Text()
+	title = scanner.Text()
 
 	fmt.Println("Please enter the category color")
 	scanner.Scan()
 	color = scanner.Text()
-	fmt.Println("category", name, color)
+
+	category := Category{
+		ID:     id.String(),
+		Title:  title,
+		Color:  color,
+		UserID: authenticatedUser.ID,
+	}
+
+	categoryStorage = append(categoryStorage, category)
+	fmt.Println("category", title, color)
 }
 
 func register() {
@@ -168,7 +185,7 @@ func login() {
 }
 func listTask() {
 	for _, task := range taskStorage {
-		if task.UserId == authenticatedUser.ID {
+		if task.UserID == authenticatedUser.ID {
 			fmt.Println(task)
 		}
 	}
