@@ -13,3 +13,6 @@ A simple todo cli application with golang.
 You can use cli by following command
 
 `./todo -command=register`
+
+# Flow 
+you must first `register` and then create a category by `create-category` command , and then you can create a task by `create-task` command.

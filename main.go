@@ -15,12 +15,12 @@ type User struct {
 	Password string
 }
 type Task struct {
-	ID       string
-	Title    string
-	DueDate  string
-	Category string
-	IsDone   bool
-	UserID   string
+	ID         string
+	Title      string
+	DueDate    string
+	CategoryID string
+	IsDone     bool
+	UserID     string
 }
 type Category struct {
 	ID     string
@@ -88,18 +88,30 @@ func createTask() {
 	scanner.Scan()
 	dueDate = scanner.Text()
 
-	fmt.Println("please enter the task category")
+	fmt.Println("please enter the task category ID")
 	scanner.Scan()
 	category = scanner.Text()
-
-	task := Task{
-		ID:       id.String(),
-		Title:    title,
-		DueDate:  dueDate,
-		Category: category,
-		IsDone:   false,
-		UserID:   authenticatedUser.ID,
+	isFound := false
+	for _, c := range categoryStorage {
+		if c.ID == category && c.UserID == authenticatedUser.ID {
+			isFound = true
+			break
+		}
 	}
+	if !isFound {
+		fmt.Println("category ID is not found\n")
+
+		return
+	}
+	task := Task{
+		ID:         id.String(),
+		Title:      title,
+		DueDate:    dueDate,
+		CategoryID: category,
+		IsDone:     false,
+		UserID:     authenticatedUser.ID,
+	}
+
 	taskStorage = append(taskStorage, task)
 
 	fmt.Println("task", title, category, dueDate)
@@ -126,7 +138,7 @@ func createCategory() {
 	}
 
 	categoryStorage = append(categoryStorage, category)
-	fmt.Println("category", title, color)
+	fmt.Println("category", title, color, id.String())
 }
 
 func register() {
