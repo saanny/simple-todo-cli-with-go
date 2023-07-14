@@ -12,4 +12,4 @@ A simple todo cli application with golang.
 
 You can use cli by following command
 
-`./todo -command=regisert`
+`./todo -command=register`
